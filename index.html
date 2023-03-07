@@ -12,7 +12,7 @@
 </head>
 
   <div class="container">
-    <img src="./example.png" width="500">
+    <img src="img/example.png" width="500">
     <p>Please separate your answer with a comma</p>
     <label for="answer-input">Enter your answer:</label>
     <input type="text" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"><br>
@@ -35,7 +35,21 @@
         answerArray = answerArray.map(answerItem => answerItem.replace(/\s+/g, ""));
 
         for (var i=0; i<answerArray.length; i++){
+
             var currentText = answerArray[i]
+
+            // Clean ethanolic
+            if(currentText.toLowerCase().includes('(ethanolic)')){
+              // console.log("ethanolic after")
+              currentText = currentText.replace(/\(ethanolic\)/gi,"")
+              currentText = "ethanolic " + currentText
+              // console.log(currentText)
+            }else if(currentText.toLowerCase().includes('ethanolic')){
+              // console.log("ethanolic before")
+              currentText = currentText.replace(/ethanolic/gi,"ethanolic ")
+              // console.log(currentText)
+            }
+
             var lowerCurrentText = currentText.toLowerCase()
 
             // Gather all cases here
@@ -44,16 +58,26 @@
               // console.log('heat')
               var currentTextCleaned = cleanHeat(currentText)
               answerArray[i] = currentTextCleaned
+              console.log(currentTextCleaned)
 
             }else if(lowerCurrentText.includes('conc')){
               // If there is conc
               // console.log('conc')
               var currentTextCleaned = cleanConc(currentText)
               answerArray[i] = currentTextCleaned
+              console.log(currentTextCleaned)
+
             }else{
               // Can remove this 'else' statement
+              var currentTextCleaned = currentText
               console.log('nothing to see here')
+              // console.log(currentTextCleaned)
+              console.log(currentTextCleaned)
+              answerArray[i] = currentTextCleaned
             }
+
+            // Need to clean up 'alc' or 'alcoholic' (ignore this as we treat this as an incorrect answer)
+
         }
 
         return answerArray
@@ -93,8 +117,8 @@
 
         if (lowerCaseText.includes('concentrated') && lowerCaseText.includes('excess')){
           // If word contains concentrated and excess
-          var cleanedText = text.replace("concentrated", "")
-          cleanedText = cleanedText.replace("excess", "")
+          var cleanedText = text.replace(/concentrated/gi, "")
+          cleanedText = cleanedText.replace(/excess/gi, "")
 
           // Remove all symbols
           cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
@@ -104,8 +128,8 @@
 
         }else if(lowerCaseText.includes('conc')  && lowerCaseText.includes('excess')){
           // If word contains conc and excess
-          var cleanedText = text.replace("conc", "")
-          cleanedText = cleanedText.replace("excess", "")
+          var cleanedText = text.replace(/conc/gi, "")
+          cleanedText = cleanedText.replace(/excess/gi, "")
 
           // Remove all symbols
           cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
@@ -113,12 +137,9 @@
           // Provide the cleanest text
           cleanedText = "Excess conc. " + cleanedText
 
-          // Provide the cleanest text
-          cleanedText = "conc. " + cleanedText
-
         }else if (lowerCaseText.includes('concentrated')){
           // If word contains concentrated
-          var cleanedText = text.replace("concentrated", "")
+          var cleanedText = text.replace(/concentrated/gi, "")
 
           // Remove all symbols
           cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
@@ -128,7 +149,7 @@
 
         }else if(lowerCaseText.includes('conc')){
           // If word contains conc
-          var cleanedText = text.replace("conc", "")
+          var cleanedText = text.replace(/conc/gi, "")
 
           // Remove all symbols
           cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
@@ -146,7 +167,7 @@
 
     // Print out model answer
     modelAnswerCleaned = cleanResponse(modelAnswer)
-    document.getElementById('correctAnswerDiv').innerText = modelAnswerCleaned.join(", ")
+    document.getElementById('correctAnswerDiv').innerHTML = `<b>Model Answer: </b>${modelAnswerCleaned.join(", ")}`
 
     function displayModelAnswer(){
 
@@ -180,6 +201,8 @@
           }
         }
       }
+
+      console.log(userAnswerCleaned)
 
       document.getElementById("result").innerText = `Your answer: ${userAnswerCleaned.join(', ')}\nYou got ${numCorrect} out of ${modelAnswerCleaned.length} correct.`;
 
