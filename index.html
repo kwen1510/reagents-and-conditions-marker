@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RnC Automarker</title>
+</head>
+<body>
+  <!-- Insert a random question here -->
+  <p>Please separate your answer with a comma</p>
+  <label for="answer-input">Enter your answer:</label>
+  <input type="text" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"><br>
+  <button onclick="checkAnswer()">Check Answer</button><br>
+  <button onclick="displayModelAnswer()" id="toggleButton">Show model answer</button>
+  <div id="correctAnswerDiv" style="display: none;"></div>
+  <div id="result"></div>
+
+  <script>
+    // Store the correct answer in a variable
+    var modelAnswer = "conc H2SO4, KMnO4(aq), heat";
+
+    function cleanResponse(answer) {
+        // Function to modify the answers
+
+        // Split the answers into an array
+        var answerArray = answer.split(",")
+
+        answerArray = answerArray.map(answerItem => answerItem.replace(/\s+/g, ""));
+
+        for (var i=0; i<answerArray.length; i++){
+            var currentText = answerArray[i]
+            var lowerCurrentText = currentText.toLowerCase()
+
+            // Gather all cases here
+            if(lowerCurrentText.includes('heat')){
+              // If there is heat, run cleanHeat function
+              // console.log('heat')
+              var currentTextCleaned = cleanHeat(currentText)
+              answerArray[i] = currentTextCleaned
+
+            }else if(lowerCurrentText.includes('conc')){
+              // If there is conc
+              // console.log('conc')
+              var currentTextCleaned = cleanConc(currentText)
+              answerArray[i] = currentTextCleaned
+            }else{
+              // Can remove this 'else' statement
+              console.log('nothing to see here')
+            }
+        }
+
+        return answerArray
+    }
+
+    function cleanHeat(text){
+        /* Clean variations of heat
+        - Keep 'heat' as 'heat'
+        - Replace 'heat with reflux' to 'heat'
+            - search for presence of heat, ref
+        - Keep 'heat with immediate distillation'
+            - Search for presence of heat, im, dist
+        */
+        var lowerCaseText = text.toLowerCase()
+
+        if (lowerCaseText.includes('heat') && lowerCaseText.includes('im') && lowerCaseText.includes('dist')){
+          // If heat with immediate distillation
+          var cleanedText = "Heat with immediate distillation"
+        }else if(lowerCaseText.includes('heat') && lowerCaseText.includes('ref')){
+          // If heat with reflux
+          var cleanedText = "Heat (with reflux)"
+        }else{
+          var cleanedText = "Heat"
+        }
+
+        return cleanedText
+    }
+
+    function cleanConc(text){
+        /* Clean variations of conc
+        - excess conc
+        - conc H2SO4
+        - concentrated H2SO4
+        - H2SO4 (conc)
+        */
+        var lowerCaseText = text.toLowerCase()
+
+        if (lowerCaseText.includes('concentrated') && lowerCaseText.includes('excess')){
+          // If word contains concentrated and excess
+          var cleanedText = text.replace("concentrated", "")
+          cleanedText = cleanedText.replace("excess", "")
+
+          // Remove all symbols
+          cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
+
+          // Provide the cleanest text
+          cleanedText = "Excess conc. " + cleanedText
+
+        }else if(lowerCaseText.includes('conc')  && lowerCaseText.includes('excess')){
+          // If word contains conc and excess
+          var cleanedText = text.replace("conc", "")
+          cleanedText = cleanedText.replace("excess", "")
+
+          // Remove all symbols
+          cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
+
+          // Provide the cleanest text
+          cleanedText = "Excess conc. " + cleanedText
+
+          // Provide the cleanest text
+          cleanedText = "conc. " + cleanedText
+
+        }else if (lowerCaseText.includes('concentrated')){
+          // If word contains concentrated
+          var cleanedText = text.replace("concentrated", "")
+
+          // Remove all symbols
+          cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
+
+          // Provide the cleanest text
+          cleanedText = "conc. " + cleanedText
+
+        }else if(lowerCaseText.includes('conc')){
+          // If word contains conc
+          var cleanedText = text.replace("conc", "")
+
+          // Remove all symbols
+          cleanedText = cleanedText.replace(/[^\w\s]/gi, "");
+
+          // Provide the cleanest text
+          cleanedText = "conc. " + cleanedText
+        }
+
+        if (cleanedText.includes("aq")){
+          cleanedText = cleanedText.replace("aq","(aq)")
+        }
+
+        return cleanedText
+    }
+
+    // Print out model answer
+    modelAnswerCleaned = cleanResponse(modelAnswer)
+    document.getElementById('correctAnswerDiv').innerText = modelAnswerCleaned.join(", ")
+
+    function displayModelAnswer(){
+
+      var correctAnswerDiv = document.getElementById('correctAnswerDiv')
+      var toggleButton = document.getElementById('toggleButton')
+
+      if (correctAnswerDiv.style.display === "none") {
+        correctAnswerDiv.style.display = "block";
+        toggleButton.textContent = "Hide model answer";
+      } else {
+        correctAnswerDiv.style.display = "none";
+        toggleButton.textContent = "Show model answer";
+      }
+    }
+
+    // Function to check answer
+    function checkAnswer() {
+      // Get the user's answer from the input box
+      var userAnswer = document.getElementById("answer-input").value;
+
+      userAnswerCleaned = cleanResponse(userAnswer)
+
+      // Compare the user's answer with the correct answer
+      let numCorrect = 0;
+
+      for (let i = 0; i < userAnswerCleaned.length; i++) {
+        for (let j = 0; j < modelAnswerCleaned.length; j++) {
+          if (userAnswerCleaned[i] === modelAnswerCleaned[j]) {
+            numCorrect++;
+            break;
+          }
+        }
+      }
+
+      document.getElementById("result").innerText = `Your answer: ${userAnswerCleaned.join(', ')}\nYou got ${numCorrect} out of ${modelAnswerCleaned.length} correct.`;
+
+      if (numCorrect == modelAnswerCleaned.length){
+        document.getElementById("result").style.color = "green"
+      }else{
+        document.getElementById("result").style.color = "red"
+      }
+
+    }
+  </script>
+</body>
+</html>
