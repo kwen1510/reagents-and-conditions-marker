@@ -14,8 +14,8 @@
   <div class="container">
     <img src="example.PNG" width="500">
     <p>Please separate your answer with a comma</p>
-    <label for="answer-input">Enter your answer:</label>
-    <input type="text" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"><br>
+    <label for="answer-input">Enter your answer:</label><br>
+    <textarea name="Text1" cols="40" rows="5" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"></textarea>
     <button onclick="checkAnswer()" class="btn btn-primary mt-2">Check Answer</button><br>
     <button onclick="displayModelAnswer()" id="toggleButton" class="btn btn-success mt-2">Show model answer</button>
     <div id="correctAnswerDiv" style="display: none;"></div>
@@ -100,6 +100,7 @@
             - search for presence of heat, ref
         - Keep 'heat with immediate distillation'
             - Search for presence of heat, im, dist
+        - Heat with sealed tube
         */
         var lowerCaseText = text.toLowerCase()
 
