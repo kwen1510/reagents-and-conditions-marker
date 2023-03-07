@@ -88,8 +88,6 @@
               answerArray[i] = currentTextCleaned
             }
 
-            // Need to clean up 'alc' or 'alcoholic' (ignore this as we treat this as an incorrect answer)
-
         }
 
         return answerArray
@@ -111,6 +109,8 @@
         }else if(lowerCaseText.includes('heat') && lowerCaseText.includes('ref')){
           // If heat with reflux
           var cleanedText = "Heat (with reflux)"
+        }else if(lowerCaseText.includes('heat') && lowerCaseText.includes('sealedtube')){
+          var cleanedText = "Heat in sealed tube"
         }else{
           var cleanedText = "Heat"
         }
