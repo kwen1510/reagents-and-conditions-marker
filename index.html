@@ -12,7 +12,7 @@
 </head>
 
   <div class="container">
-    <img src="example.PNG" width="500">
+    <img src="img/example.png" width="500">
     <p>Please separate your answer with a comma</p>
     <label for="answer-input">Enter your answer:</label>
     <input type="text" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"><br>
@@ -47,6 +47,18 @@
             }else if(currentText.toLowerCase().includes('ethanolic')){
               // console.log("ethanolic before")
               currentText = currentText.replace(/ethanolic/gi,"ethanolic ")
+              // console.log(currentText)
+            }
+
+            // Clean alcoholic
+            if(currentText.toLowerCase().includes('(alcoholic)')){
+              // console.log("alcoholic after")
+              currentText = currentText.replace(/\(alcoholic\)/gi,"")
+              currentText = "alcoholic " + currentText
+              // console.log(currentText)
+            }else if(currentText.toLowerCase().includes('alcoholic')){
+              // console.log("alcoholic before")
+              currentText = currentText.replace(/alcoholic/gi,"alcoholic ")
               // console.log(currentText)
             }
 
