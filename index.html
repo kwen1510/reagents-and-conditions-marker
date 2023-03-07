@@ -15,7 +15,7 @@
     <img src="example.PNG" width="500">
     <p>Please separate your answer with a comma</p>
     <label for="answer-input">Enter your answer:</label><br>
-    <textarea name="Text1" cols="40" rows="5" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"></textarea>
+    <textarea name="Text1" cols="40" rows="5" id="answer-input" onkeydown="if(event.keyCode == 13) { checkAnswer(); }"></textarea><br>
     <button onclick="checkAnswer()" class="btn btn-primary mt-2">Check Answer</button><br>
     <button onclick="displayModelAnswer()" id="toggleButton" class="btn btn-success mt-2">Show model answer</button>
     <div id="correctAnswerDiv" style="display: none;"></div>
