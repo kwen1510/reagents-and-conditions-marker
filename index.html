@@ -46,19 +46,42 @@
               // console.log(currentText)
             }else if(currentText.toLowerCase().includes('ethanolic')){
               // console.log("ethanolic before")
-              currentText = currentText.replace(/ethanolic/gi,"ethanolic ")
+              currentText = currentText.replace(/ethanolic/gi,"")
+              currentText = "ethanolic " + currentText
               // console.log(currentText)
+            }else if(currentText.toLowerCase().includes('inethanol')){
+              // console.log("ethanolic before")
+              currentText = currentText.replace(/inethanol/gi,"")
+              currentText = "ethanolic " + currentText
+            }else if(currentText.toLowerCase().includes('ethanol')){
+              // console.log("ethanolic before")
+              currentText = currentText.replace(/ethanol/gi,"")
+              currentText = "ethanolic " + currentText
             }
 
-            // Clean alcoholic
+            // Clean alcoholic and alc
             if(currentText.toLowerCase().includes('(alcoholic)')){
               // console.log("alcoholic after")
               currentText = currentText.replace(/\(alcoholic\)/gi,"")
-              currentText = "alcoholic " + currentText
+              currentText = "ethanolic " + currentText
               // console.log(currentText)
             }else if(currentText.toLowerCase().includes('alcoholic')){
               // console.log("alcoholic before")
-              currentText = currentText.replace(/alcoholic/gi,"alcoholic ")
+              currentText = currentText.replace(/alcoholic/gi,"")
+              currentText = "ethanolic " + currentText
+              // console.log(currentText)
+            }else if(currentText.toLowerCase().includes('inalcohol')){
+              // console.log("alcoholic before")
+              currentText = currentText.replace(/inalcohol/gi,"")
+              currentText = "ethanolic " + currentText
+            }else if(currentText.toLowerCase().includes('alcohol')){
+              // console.log("alcoholic before")
+              currentText = currentText.replace(/alcohol/gi,"")
+              currentText = "ethanolic " + currentText
+            }else if(currentText.toLowerCase().includes('(alc)')){
+              // console.log("alcoholic after")
+              currentText = currentText.replace(/\(alc\)/gi,"")
+              currentText = "ethanolic " + currentText
               // console.log(currentText)
             }
 
